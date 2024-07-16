@@ -16,8 +16,9 @@ class ContributorAdmin(admin.ModelAdmin):
 
 
 class BookAdmin(admin.ModelAdmin):
+    date_hierarchy = 'publication_date'
     list_display = ('title', 'isbn13', 'has_isbn')
-    list_filter = ('publisher',)
+    list_filter = ('publisher', 'publication_date')
 
     @admin.display(
         ordering='isbn',
