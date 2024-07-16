@@ -3,16 +3,22 @@ from reviews.models import (Publisher, Contributor,
                             Book, BookContributor, Review)
 
 
-def initialled_name(obj):
-    """ obj.first_names='Jerome David',
-    obj.last_names='Salinger'=> 'Salinger, JD' """
-    initials = ''.join([name[0] for name in
-                        obj.first_names.split(' ')])
-    return "{}, {}".format(obj.last_names, initials)
-
-
 class ContributorAdmin(admin.ModelAdmin):
-    list_display = (initialled_name,)
+    list_display = ('initialled_name', 'last_names', 'first_names',)
+    list_filter = ('last_names',)
+    search_fields = ('last_names', 'first_names',)
+
+    @admin.display(
+        ordering='first_names',
+        description='Name Init',
+        empty_value='-/-'
+    )
+    def initialled_name(self, obj):
+        """ obj.first_names='Jerome David',
+        obj.last_names='Salinger'=> 'Salinger, JD' """
+        initials = ''.join([name[0] for name in
+                            obj.first_names.split(' ')])
+        return "{}, {}".format(obj.last_names, initials)
 
 
 class ReviewAdmin(admin.ModelAdmin):

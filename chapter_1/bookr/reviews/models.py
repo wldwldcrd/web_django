@@ -29,11 +29,11 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
-    def isbn13(self):
-        """ '9780316769174' => '978-0-31-676917-4' """
-        return "{}-{}-{}-{}-{}".format(self.isbn[0:3],
-                                       self.isbn[3:4], self.isbn[4:6],
-                                       self.isbn[6:12], self.isbn[12:13])
+    # def isbn13(self):
+    #     """ '9780316769174' => '978-0-31-676917-4' """
+    #     return "{}-{}-{}-{}-{}".format(self.isbn[0:3],
+    #                                    self.isbn[3:4], self.isbn[4:6],
+    #                                    self.isbn[6:12], self.isbn[12:13])
 
 
 class Contributor(models.Model):
@@ -45,8 +45,15 @@ class Contributor(models.Model):
     email = models.EmailField(
         help_text="The contact email for the contributor.")
 
+    def initialled_name(self):
+        """ self.first_names='Jerome David', self.last_names='Salinger'
+            => 'Salinger, JD' """
+        initials = ''.join([name[0] for name
+                            in self.first_names.split(' ')])
+        return "{}, {}".format(self.last_names, initials)
+
     def __str__(self):
-        return self.first_names
+        return self.initialled_name()
 
 
 class BookContributor(models.Model):
